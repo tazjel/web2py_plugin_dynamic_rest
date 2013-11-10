@@ -20,11 +20,12 @@ class GET(object):
             '/{table}/{{{table}.id}}']
         self.table_fields = {}
         self.init = {}
+        self.queries = {}
     
     def __call__(self, *args, **vars):
         if len(args) == 0:
             return {'content': self.table_fields.keys()}
-        parser = self.db.parse_as_rest(self.patterns, args, vars)
+        parser = self.db.parse_as_rest(self.patterns, args, vars, queries=self.queries)
         if parser.status != 200:
             raise HTTP(parser.status, parser.error)
         fields = [{'name': str(field).split('.')[-1],
